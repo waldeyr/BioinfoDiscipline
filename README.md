@@ -39,10 +39,21 @@ conda config --add channels conda-forge
 
 `conda install pandas numpy jupyterlab jupyter -y`
 
-`conda install -c bioconda sra-tools entrez-direct fastqc fastp spades quast -y`
+`conda install -c bioconda sra-tools entrez-direct fastqc fastp spades quast star htseq -y`
+
+* R packages (run it from the R prompt):
+
+`install.packages('IRkernel')`
+```
+if (!requireNamespace("BiocManager", quietly = TRUE))
+    install.packages("BiocManager")
+
+BiocManager::install("edgeR")
+```
 
 
-## :notebook_with_decorative_cover: Practice 01 (De novo assembly of a Brazillian isolate of Sars-Cov-2 Genome)
+
+## :notebook_with_decorative_cover: Practice 01 - De novo assembly of a Brazillian isolate of Sars-Cov-2 Genome
 
 ### Obtaining the raw material
 
@@ -72,5 +83,54 @@ conda config --add channels conda-forge
 
 `quast.py assembly/scaffolds.fasta -r NC_045512.2.fasta`
 
+## :notebook_with_decorative_cover: Practice 02 - [Transcriptome of human T cell stimulated with anti-CD3 antibody (Sousa, 2019)](https://www.ncbi.nlm.nih.gov/geo/query/acc.cgi?acc=GSE112899)
+
+Briefing: human peripheral blood mononuclear cells were purified from healthy volunteers blood and were cultured in the presence of the monoclonal antibody OKT3 or a recombinant fragment of humanized anti-CD3 (FvFcR) or recombinant fragment chimeric anti-CD3 (FvFcM).
+
+* For the tutorial, we only will use the chromossome 22 and a monoclonal antibody OKT3 sample to make it feasible in a personal computer.
+
+### Obtaining the raw material
+
+* [Homo sapiens reference genome](http://www.ensembl.org/info/data/ftp/index.html)
+* [Chromossome 22 DNA sequence](http://ftp.ensembl.org/pub/release-104/fasta/homo_sapiens/dna/Homo_sapiens.GRCh38.dna.chromosome.22.fa.gz)
+* [Chromossome 22 GFF3 annotation](http://ftp.ensembl.org/pub/release-104/gff3/homo_sapiens/Homo_sapiens.GRCh38.104.chromosome.22.gff3.gz)
+* OKT3 replica 1  = SRR6974025
+
+`mkdir genome_reference && cd genome_reference`
+
+`wget http://ftp.ensembl.org/pub/release-104/fasta/homo_sapiens/dna/Homo_sapiens.GRCh38.dna.chromosome.22.fa.gz`
+
+`wget http://ftp.ensembl.org/pub/release-104/gff3/homo_sapiens/Homo_sapiens.GRCh38.104.chromosome.22.gff3.gz`
+
+`gunzip Homo_sapiens.GRCh38.dna.chromosome.22.fa.gz && gunzip Homo_sapiens.GRCh38.104.chromosome.22.gff3.gz && cd ../`
+
+`fastq-dump --accession SRR6974025 --split-files --outdir rawdata -v`
+
+### Filtering the reads quality using fastp
+
+`fastqc rawdata/SRR6974025_1.fastq rawdata/SRR6974025_2.fastq`
+
+`mkdir filtered_data && fastp --thread 4 -p -q 30 -i rawdata/SRR6974025_1.fastq -I rawdata/SRR6974025_2.fastq -o filtered_data/SRR6974025_1_FILTERED.fastq -O filtered_data/SRR6974025_2_FILTERED.fastq --verbose --cut_tail_mean_quality 30 --average_qual 30 && mv fastp.* filtered_data/ `
+
+### Generating an index for the genome reference
+
+``STAR --runThreadN 4 \
+--runMode genomeGenerate \
+--genomeDir genome_reference \
+--genomeFastaFiles genome_reference/Homo_sapiens.GRCh38.dna.chromosome.22.fa \
+--sjdbGTFfile genome_reference/Homo_sapiens.GRCh38.104.chromosome.22.gff3 \
+--sjdbOverhang 99
+
+### Mapping the filtered reads to the genome using STAR
+
+`STAR --genomeDir genome_reference \
+--runThreadN 4 \
+--readFilesIn filtered_data/SRR6974025_1_FILTERED.fastq filtered_data/SRR6974025_2_FILTERED.fastq \
+--outFileNamePrefix SRR6974025 \
+--outSAMtype BAM SortedByCoordinate \
+--outSAMunmapped Within \
+--outSAMattributes Standard`
 
 
+## References
+Sousa IG, Simi KCR, do Almo MM, Bezerra MAG et al. Gene expression profile of human T cells following a single stimulation of peripheral blood mononuclear cells with anti-CD3 antibodies. BMC Genomics 2019 Jul 19;20(1):593. PMID: 31324145
