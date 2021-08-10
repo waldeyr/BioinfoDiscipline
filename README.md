@@ -94,6 +94,7 @@ Briefing: human peripheral blood mononuclear cells were purified from healthy vo
 * [Homo sapiens reference genome](http://www.ensembl.org/info/data/ftp/index.html)
 * [Chromossome 22 DNA sequence](http://ftp.ensembl.org/pub/release-104/fasta/homo_sapiens/dna/Homo_sapiens.GRCh38.dna.chromosome.22.fa.gz)
 * [Chromossome 22 GFF3 annotation](http://ftp.ensembl.org/pub/release-104/gff3/homo_sapiens/Homo_sapiens.GRCh38.104.chromosome.22.gff3.gz)
+* [Chromossome 22 GTF annotation](http://ftp.ensembl.org/pub/release-104/gtf/homo_sapiens/Homo_sapiens.GRCh38.104.chr.gtf.gz)
 * OKT3  replica 1 = SRR6974025
 * FvFcR replica 1 = SRR6974027
 
@@ -122,22 +123,38 @@ Briefing: human peripheral blood mononuclear cells were purified from healthy vo
 
 ### Generating an index for the genome reference
 
-``STAR --runThreadN 4 \
+`STAR --runThreadN 4 \
 --runMode genomeGenerate \
 --genomeDir genome_reference \
 --genomeFastaFiles genome_reference/Homo_sapiens.GRCh38.dna.chromosome.22.fa \
 --sjdbGTFfile genome_reference/Homo_sapiens.GRCh38.104.chromosome.22.gff3 \
---sjdbOverhang 99
+--sjdbOverhang 99`
 
 ### Mapping the filtered reads to the genome using STAR
 
 `STAR --genomeDir genome_reference \
 --runThreadN 4 \
---readFilesIn filtered_data/SRR6974025_1_FILTERED.fastq filtered_data/SRR6974025_2_FILTERED.fastq \
+--readFilesIn filtered_data/SRR6974025_sub_FILTERED.fastq \
 --outFileNamePrefix SRR6974025 \
 --outSAMtype BAM SortedByCoordinate \
 --outSAMunmapped Within \
---outSAMattributes Standard`
+--outSAMattributes Standard \
+--quantMode GeneCounts TranscriptomeSAM`
+
+`STAR --genomeDir genome_reference \
+--runThreadN 4 \
+--readFilesIn filtered_data/SRR6974027_sub_FILTERED.fastq \
+--outFileNamePrefix SRR6974027 \
+--outSAMtype BAM SortedByCoordinate \
+--outSAMunmapped Within \
+--outSAMattributes Standard \
+--quantMode GeneCounts`
+
+### Counting mapped genes with htseq-count
+
+`htseq-count -f bam --idattr gene_id SRR6974025Aligned.sortedByCoord.out.bam genome_reference/Homo_sapiens.GRCh38.104.chr.gtf`
+
+`htseq-count -f bam --idattr gene_id SRR6974027Aligned.sortedByCoord.out.bam genome_reference/Homo_sapiens.GRCh38.104.chr.gtf`
 
 
 ## References
