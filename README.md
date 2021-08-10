@@ -39,7 +39,7 @@ conda config --add channels conda-forge
 
 `conda install pandas numpy jupyterlab jupyter -y`
 
-`conda install -c bioconda sra-tools entrez-direct fastqc fastp spades quast star htseq -y`
+`conda install -c bioconda sra-tools entrez-direct fastqc fastp spades quast star htseq seqtk -y`
 
 * R packages (run it from the R prompt):
 
@@ -94,7 +94,8 @@ Briefing: human peripheral blood mononuclear cells were purified from healthy vo
 * [Homo sapiens reference genome](http://www.ensembl.org/info/data/ftp/index.html)
 * [Chromossome 22 DNA sequence](http://ftp.ensembl.org/pub/release-104/fasta/homo_sapiens/dna/Homo_sapiens.GRCh38.dna.chromosome.22.fa.gz)
 * [Chromossome 22 GFF3 annotation](http://ftp.ensembl.org/pub/release-104/gff3/homo_sapiens/Homo_sapiens.GRCh38.104.chromosome.22.gff3.gz)
-* OKT3 replica 1  = SRR6974025
+* OKT3  replica 1 = SRR6974025
+* FvFcR replica 1 = SRR6974027
 
 `mkdir genome_reference && cd genome_reference`
 
@@ -104,11 +105,18 @@ Briefing: human peripheral blood mononuclear cells were purified from healthy vo
 
 `gunzip Homo_sapiens.GRCh38.dna.chromosome.22.fa.gz && gunzip Homo_sapiens.GRCh38.104.chromosome.22.gff3.gz && cd ../`
 
-`fastq-dump --accession SRR6974025 --split-files --outdir rawdata -v`
+`fastq-dump --accession SRR6974025 --outdir rawdata -v`
+
+`fastq-dump --accession SRR6974027 --outdir rawdata -v`
+
+`seqtk sample -s100 SRR6974025.fastq 1000000 > SRR6974025_sub.fastq`
+
+`seqtk sample -s100 SRR6974027.fastq 1000000 > SRR6974027_sub.fastq`
 
 ### Filtering the reads quality using fastp
 
-`fastqc rawdata/SRR6974025_1.fastq rawdata/SRR6974025_2.fastq`
+`fastqc rawdata/SRR6974025_sub.fastq`
+`fastqc rawdata/SRR6974027_sub.fastq`
 
 `mkdir filtered_data && fastp --thread 4 -p -q 30 -i rawdata/SRR6974025_1.fastq -I rawdata/SRR6974025_2.fastq -o filtered_data/SRR6974025_1_FILTERED.fastq -O filtered_data/SRR6974025_2_FILTERED.fastq --verbose --cut_tail_mean_quality 30 --average_qual 30 && mv fastp.* filtered_data/ `
 
