@@ -1,4 +1,4 @@
-# :school: Bioinfo Discipline
+# :school: Práticas da Disciplina de Bioinformática (Bioinformatics Discipline Practices)
 
 This is a repository for the Bioinformatics Discipline practices.
 
