@@ -39,7 +39,7 @@ conda config --add channels conda-forge
 
 `conda install pandas numpy jupyterlab jupyter -y`
 
-`conda install -c bioconda sra-tools entrez-direct fastqc fastp spades quast star htseq seqtk -y`
+`conda install -c bioconda sra-tools entrez-direct fastqc fastp spades quast star htseq seqtk samtools -y`
 
 * R packages (run it from the R prompt):
 
