@@ -117,11 +117,14 @@ Briefing: human peripheral blood mononuclear cells were purified from healthy vo
 ### Filtering the reads quality using fastp
 
 `fastqc rawdata/SRR6974025_sub.fastq`
+
 `fastqc rawdata/SRR6974027_sub.fastq`
 
 `mkdir filtered_data`
 
-`fastp --thread 4 -p -q 30 -i rawdata/SRR6974025_1.fastq -I rawdata/SRR6974025_2.fastq -o filtered_data/SRR6974025_1_FILTERED.fastq -O filtered_data/SRR6974025_2_FILTERED.fastq --verbose --cut_tail_mean_quality 30 --average_qual 30`
+`fastp --thread 4 -p -q 30 -i rawdata/SRR6974025_sub.fastq -o filtered_data/SRR6974025_sub_FILTERED.fastq --verbose --average_qual 30`
+
+`fastp --thread 4 -p -q 30 -i rawdata/SRR6974027_sub.fastq -o filtered_data/SRR6974027_sub_FILTERED.fastq --verbose --average_qual 30`
 
 `mv fastp.* filtered_data/`
 
