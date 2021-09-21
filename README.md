@@ -39,18 +39,13 @@ conda config --add channels conda-forge
 
 `conda install pandas numpy jupyterlab jupyter -y`
 
-`conda install -c bioconda sra-tools entrez-direct fastqc fastp spades quast star htseq seqtk samtools -y`
+`conda install -c conda-forge readline=6.2 -y` 
+
+`conda install -c bioconda sra-tools entrez-direct fastqc fastp spades quast star htseq seqtk samtools bioconductor-deseq2 -y`
 
 * R packages (run it from the R prompt):
 
 `install.packages('IRkernel')`
-```
-if (!requireNamespace("BiocManager", quietly = TRUE))
-    install.packages("BiocManager")
-
-BiocManager::install("edgeR")
-```
-
 
 
 ## :notebook_with_decorative_cover: Practice 01 - De novo assembly of a Brazillian isolate of Sars-Cov-2 Genome
@@ -110,58 +105,37 @@ Briefing: human peripheral blood mononuclear cells were purified from healthy vo
 
 `fastq-dump --accession SRR6974027 --outdir rawdata -v`
 
-`seqtk sample -s100 SRR6974025.fastq 1000000 > SRR6974025_sub.fastq`
-
-`seqtk sample -s100 SRR6974027.fastq 1000000 > SRR6974027_sub.fastq`
 
 ### Filtering the reads quality using fastp
 
-`fastqc rawdata/SRR6974025_sub.fastq`
+`fastqc rawdata/SRR6974025.fastq`
 
-`fastqc rawdata/SRR6974027_sub.fastq`
+`fastqc rawdata/SRR6974027.fastq`
 
 `mkdir filtered_data`
 
-`fastp --thread 4 -p -q 30 -i rawdata/SRR6974025_sub.fastq -o filtered_data/SRR6974025_sub_FILTERED.fastq --verbose --average_qual 30`
+`fastp --thread 4 -p -q 30 -i rawdata/SRR6974025.fastq -o filtered_data/SRR6974025_FILTERED.fastq --verbose --average_qual 30`
 
-`fastp --thread 4 -p -q 30 -i rawdata/SRR6974027_sub.fastq -o filtered_data/SRR6974027_sub_FILTERED.fastq --verbose --average_qual 30`
+`fastp --thread 4 -p -q 30 -i rawdata/SRR6974027.fastq -o filtered_data/SRR6974027_FILTERED.fastq --verbose --average_qual 30`
 
 `mv fastp.* filtered_data/`
 
 ### Generating an index for the genome reference
 
-`STAR --runThreadN 4 \
---runMode genomeGenerate \
---genomeDir genome_reference \
---genomeFastaFiles genome_reference/Homo_sapiens.GRCh38.dna.chromosome.22.fa \
---sjdbGTFfile genome_reference/Homo_sapiens.GRCh38.104.chromosome.22.gff3 \
---sjdbOverhang 99`
+`STAR --runThreadN 4 --runMode genomeGenerate --genomeDir genome_reference --genomeFastaFiles genome_reference/Homo_sapiens.GRCh38.dna.chromosome.22.fa --sjdbGTFfile genome_reference/Homo_sapiens.GRCh38.104.chromosome.22.gff3 --sjdbOverhang 99``
 
 ### Mapping the filtered reads to the genome using STAR
 
-`STAR --genomeDir genome_reference \
---runThreadN 4 \
---readFilesIn filtered_data/SRR6974025_sub_FILTERED.fastq \
---outFileNamePrefix SRR6974025 \
---outSAMtype BAM SortedByCoordinate \
---outSAMunmapped Within \
---outSAMattributes Standard \
---quantMode GeneCounts TranscriptomeSAM`
+`STAR --genomeDir genome_reference --runThreadN 4 --readFilesIn filtered_data/SRR6974025_FILTERED.fastq --outFileNamePrefix SRR6974025 --outSAMtype BAM SortedByCoordinate --outSAMunmapped Within --outSAMattributes Standard --quantMode GeneCounts TranscriptomeSAM`
 
-`STAR --genomeDir genome_reference \
---runThreadN 4 \
---readFilesIn filtered_data/SRR6974027_sub_FILTERED.fastq \
---outFileNamePrefix SRR6974027 \
---outSAMtype BAM SortedByCoordinate \
---outSAMunmapped Within \
---outSAMattributes Standard \
---quantMode GeneCounts`
+`STAR --genomeDir genome_reference --runThreadN 4 --readFilesIn filtered_data/SRR6974027_FILTERED.fastq --outFileNamePrefix SRR6974027 --outSAMtype BAM SortedByCoordinate --outSAMunmapped Within --outSAMattributes Standard --quantMode GeneCounts`
 
 ### Counting mapped genes with htseq-count
 
-`htseq-count -f bam --idattr gene_id SRR6974025Aligned.sortedByCoord.out.bam genome_reference/Homo_sapiens.GRCh38.104.chr.gtf`
+`htseq-count --nonunique all --format bam --stranded no --order pos --type exon --idattr gene_id SRR6974025Aligned.sortedByCoord.out.bam genome_reference/Homo_sapiens.GRCh38.104.chr.gtf > SRR6974025Aligned.counts
+`
 
-`htseq-count -f bam --idattr gene_id SRR6974027Aligned.sortedByCoord.out.bam genome_reference/Homo_sapiens.GRCh38.104.chr.gtf`
+`htseq-count --nonunique all --format bam --stranded no --order pos --type exon --idattr gene_id SRR6974027Aligned.sortedByCoord.out.bam genome_reference/Homo_sapiens.GRCh38.104.chr.gtf > SRR6974027Aligned.counts`
 
 
 ## References
