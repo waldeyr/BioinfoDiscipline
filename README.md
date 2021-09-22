@@ -120,15 +120,20 @@ Briefing: human peripheral blood mononuclear cells were purified from healthy vo
 
 `mv fastp.* filtered_data/`
 
+`seqtk sample -s100 filtered_data/SRR6974025_FILTERED.fastq 10000000 > filtered_data/SRR6974025_FILTERED_SUB.fastq`
+
+`seqtk sample -s100 filtered_data/SRR6974027_FILTERED.fastq 10000000 > filtered_data/SRR6974027_FILTERED_SUB.fastq`
+
+
 ### Generating an index for the genome reference
 
 `STAR --runThreadN 4 --runMode genomeGenerate --genomeDir genome_reference --genomeFastaFiles genome_reference/Homo_sapiens.GRCh38.dna.chromosome.22.fa --sjdbGTFfile genome_reference/Homo_sapiens.GRCh38.104.chromosome.22.gff3 --sjdbOverhang 99``
 
 ### Mapping the filtered reads to the genome using STAR
 
-`STAR --genomeDir genome_reference --runThreadN 4 --readFilesIn filtered_data/SRR6974025_FILTERED.fastq --outFileNamePrefix SRR6974025 --outSAMtype BAM SortedByCoordinate --outSAMunmapped Within --outSAMattributes Standard --quantMode GeneCounts TranscriptomeSAM`
+`STAR --genomeDir genome_reference --runThreadN 4 --readFilesIn filtered_data/SRR6974025_FILTERED_SUB.fastq --outFileNamePrefix SRR6974025 --outSAMtype BAM SortedByCoordinate --outSAMunmapped Within --outSAMattributes Standard --quantMode GeneCounts TranscriptomeSAM`
 
-`STAR --genomeDir genome_reference --runThreadN 4 --readFilesIn filtered_data/SRR6974027_FILTERED.fastq --outFileNamePrefix SRR6974027 --outSAMtype BAM SortedByCoordinate --outSAMunmapped Within --outSAMattributes Standard --quantMode GeneCounts`
+`STAR --genomeDir genome_reference --runThreadN 4 --readFilesIn filtered_data/SRR6974027_FILTERED_SUB.fastq --outFileNamePrefix SRR6974027 --outSAMtype BAM SortedByCoordinate --outSAMunmapped Within --outSAMattributes Standard --quantMode GeneCounts`
 
 ### Counting mapped genes with htseq-count
 
