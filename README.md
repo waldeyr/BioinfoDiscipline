@@ -120,6 +120,8 @@ Briefing: human peripheral blood mononuclear cells were purified from healthy vo
 
 `mv fastp.* filtered_data/`
 
+#### Sampling a reads subset (10 milion reads) to make it feasible in a notebook.
+
 `seqtk sample -s100 filtered_data/SRR6974025_FILTERED.fastq 10000000 > filtered_data/SRR6974025_FILTERED_SUB.fastq`
 
 `seqtk sample -s100 filtered_data/SRR6974027_FILTERED.fastq 10000000 > filtered_data/SRR6974027_FILTERED_SUB.fastq`
