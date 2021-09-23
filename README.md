@@ -19,11 +19,11 @@ This is a repository for the Bioinformatics Discipline practices.
 
 ##### Option 02:
 
-`conda create -n DisciplinaBioinfo python=3.6 r=3.6 -y`
+`conda create -n pipelines python=3.6 r=3.6 -y`
 
 #### How to enter in the environment?
 
-`conda activate DisciplinaBioinfo`
+`conda activate pipelines`
 
 #### How to setup the channels (repositories) with the needed tools?
 
@@ -36,9 +36,9 @@ conda config --add channels conda-forge
 
 `conda install pandas numpy jupyterlab jupyter -y`
 
-`conda install -c conda-forge readline=6.2 -y` 
+`conda install -c conda-forge nano readline=6.2 -y` 
 
-`conda install -c bioconda sra-tools entrez-direct fastqc fastp spades quast star htseq seqtk samtools r-xml bioconductor-deseq2 -y`
+`conda install -c bioconda sra-tools entrez-direct fastqc fastp spades quast star htseq seqtk samtools r-xml -y`
 
 * R packages (run it from the R prompt):
 
