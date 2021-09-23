@@ -19,11 +19,11 @@ This is a repository for the Bioinformatics Discipline practices.
 
 ##### Option 02:
 
-`conda create -n pipelines python=3.6 r=3.6 -y`
+`conda create -n DisciplinaBioinfo python=3.6 r=3.6 -y`
 
 #### How to enter in the environment?
 
-`conda activate pipelines`
+`conda activate DisciplinaBioinfo`
 
 #### How to setup the channels (repositories) with the needed tools?
 
