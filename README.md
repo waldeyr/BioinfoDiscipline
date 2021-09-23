@@ -19,7 +19,7 @@ This is a repository for the Bioinformatics Discipline practices.
 
 ##### Option 02:
 
-`conda create -n DisciplinaBioinfo python=3.6`
+`conda create -n DisciplinaBioinfo python=3.6 r=3.6 -y`
 
 #### How to enter in the environment?
 
@@ -28,24 +28,25 @@ This is a repository for the Bioinformatics Discipline practices.
 #### How to setup the channels (repositories) with the needed tools?
 
 ```
-conda config --add channels defaults
 conda config --add channels bioconda
 conda config --add channels conda-forge
 ```
 
 #### How to install the needed tools into the DisciplinaBioinfo environment?
 
-* Way 01
-
 `conda install pandas numpy jupyterlab jupyter -y`
 
 `conda install -c conda-forge readline=6.2 -y` 
 
-`conda install -c bioconda sra-tools entrez-direct fastqc fastp spades quast star htseq seqtk samtools bioconductor-deseq2 -y`
+`conda install -c bioconda sra-tools entrez-direct fastqc fastp spades quast star htseq seqtk samtools r-xml bioconductor-deseq2 -y`
 
 * R packages (run it from the R prompt):
 
 `install.packages('IRkernel')`
+
+`install.packages("BiocManager")`
+
+`BiocManager::install("DESeq2")`
 
 
 ## :notebook_with_decorative_cover: Practice 01 - De novo assembly of a Brazillian isolate of Sars-Cov-2 Genome
