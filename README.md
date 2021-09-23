@@ -98,9 +98,11 @@ Briefing: human peripheral blood mononuclear cells were purified from healthy vo
 
 `wget http://ftp.ensembl.org/pub/release-104/fasta/homo_sapiens/dna/Homo_sapiens.GRCh38.dna.chromosome.22.fa.gz`
 
+`wget http://ftp.ensembl.org/pub/release-104/gtf/homo_sapiens/Homo_sapiens.GRCh38.104.chr.gtf.gz`
+
 `wget http://ftp.ensembl.org/pub/release-104/gff3/homo_sapiens/Homo_sapiens.GRCh38.104.chromosome.22.gff3.gz`
 
-`gunzip Homo_sapiens.GRCh38.dna.chromosome.22.fa.gz && gunzip Homo_sapiens.GRCh38.104.chromosome.22.gff3.gz && cd ../`
+`gunzip Homo_sapiens.GRCh38.dna.chromosome.22.fa.gz && gunzip Homo_sapiens.GRCh38.104.chr.gtf.gz && gunzip Homo_sapiens.GRCh38.104.chromosome.22.gff3.gz && cd ../`
 
 `fastq-dump --accession SRR6974025 --outdir rawdata -v`
 
