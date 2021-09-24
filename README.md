@@ -132,7 +132,7 @@ Briefing: human peripheral blood mononuclear cells were purified from healthy vo
 
 ### Generating an index for the genome reference
 
-`STAR --runThreadN 4 --runMode genomeGenerate --genomeDir genome_reference --genomeFastaFiles genome_reference/Homo_sapiens.GRCh38.dna.chromosome.22.fa --sjdbGTFfile genome_reference/Homo_sapiens.GRCh38.104.chromosome.22.gff3 --sjdbOverhang 99``
+`STAR --runThreadN 4 --runMode genomeGenerate --genomeDir genome_reference --genomeFastaFiles genome_reference/Homo_sapiens.GRCh38.dna.chromosome.22.fa --sjdbGTFfile genome_reference/Homo_sapiens.GRCh38.104.chromosome.22.gff3 --sjdbOverhang 99`
 
 ### Mapping the filtered reads to the genome using STAR
 
