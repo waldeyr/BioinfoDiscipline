@@ -117,9 +117,9 @@ Briefing: human peripheral blood mononuclear cells were purified from healthy vo
 
 `mkdir filtered_data`
 
-`fastp --thread 4 -p -q 30 -i rawdata/SRR6974025.fastq -o filtered_data/SRR6974025_FILTERED.fastq --verbose --average_qual 30`
+`fastp --thread 24 -p -q 30 -i rawdata/SRR6974025.fastq -o filtered_data/SRR6974025_FILTERED.fastq --cut_mean_quality 30`
 
-`fastp --thread 4 -p -q 30 -i rawdata/SRR6974027.fastq -o filtered_data/SRR6974027_FILTERED.fastq --verbose --average_qual 30`
+`fastp --thread 24 -p -q 30 -i rawdata/SRR6974027.fastq -o filtered_data/SRR6974027_FILTERED.fastq --cut_mean_quality 30`
 
 `mv fastp.* filtered_data/`
 
