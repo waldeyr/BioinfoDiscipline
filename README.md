@@ -13,7 +13,7 @@ This is a repository for the Bioinformatics Discipline practices.
 
 ##### Option 01:
 
-`Download the file [environment.yml](https://raw.githubusercontent.com/waldeyr/BioinfoDiscipline/main/environment.yml)`
+Download the file [environment.yml](https://raw.githubusercontent.com/waldeyr/BioinfoDiscipline/main/environment.yml)
 
 `conda env create -f environment.yml`
 
