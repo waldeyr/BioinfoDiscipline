@@ -44,9 +44,9 @@ conda config --add channels conda-forge
 
 `install.packages('IRkernel')`
 
-`if (!requireNamespace("BiocManager", quietly = TRUE))
-    install.packages("BiocManager")
-BiocManager::install(c("limma","edgeR","Glimma","data.table","org.Mm.eg.db", "statmod"))`
+`install.packages("BiocManager")`
+    
+`BiocManager::install(c("limma","edgeR","Glimma","data.table","org.Mm.eg.db", "statmod"))`
 
 
 ## :notebook_with_decorative_cover: Practice 01 - De novo assembly of a Brazillian isolate of Sars-Cov-2 Genome
