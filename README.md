@@ -44,9 +44,9 @@ conda config --add channels conda-forge
 
 `install.packages('IRkernel')`
 
-`install.packages("BiocManager")`
-
-`BiocManager::install("DESeq2")`
+`if (!requireNamespace("BiocManager", quietly = TRUE))
+    install.packages("BiocManager")
+BiocManager::install(c("limma","edgeR","Glimma","data.table","org.Mm.eg.db", "statmod"))`
 
 
 ## :notebook_with_decorative_cover: Practice 01 - De novo assembly of a Brazillian isolate of Sars-Cov-2 Genome
@@ -129,24 +129,29 @@ Briefing: human peripheral blood mononuclear cells were purified from healthy vo
 
 `seqtk sample -s100 filtered_data/SRR6974027_FILTERED.fastq 10000000 > filtered_data/SRR6974027_FILTERED_SUB.fastq`
 
-
 ### Generating an index for the genome reference
 
-`STAR --runThreadN 4 --runMode genomeGenerate --genomeDir genome_reference --genomeFastaFiles genome_reference/Homo_sapiens.GRCh38.dna.chromosome.22.fa --sjdbGTFfile genome_reference/Homo_sapiens.GRCh38.104.chromosome.22.gff3 --sjdbOverhang 99`
+`STAR --runThreadN 8 --runMode genomeGenerate --genomeDir genome_reference --genomeFastaFiles genome_reference/Homo_sapiens.GRCh38.dna.chromosome.22.fa --sjdbGTFfile genome_reference/Homo_sapiens.GRCh38.104.chromosome.22.gff3 --sjdbOverhang 99`
 
 ### Mapping the filtered reads to the genome using STAR
 
-`STAR --genomeDir genome_reference --runThreadN 4 --readFilesIn filtered_data/SRR6974025_FILTERED_SUB.fastq --outFileNamePrefix SRR6974025 --outSAMtype BAM SortedByCoordinate --outSAMunmapped Within --outSAMattributes Standard --quantMode GeneCounts TranscriptomeSAM`
+`STAR --genomeDir genome_reference --runThreadN 8 --readFilesIn filtered_data/SRR6974025_FILTERED_SUB.fastq --outFileNamePrefix SRR6974025 --outSAMtype BAM SortedByCoordinate --outSAMunmapped Within --outSAMattributes Standard --quantMode GeneCounts TranscriptomeSAM`
 
-`STAR --genomeDir genome_reference --runThreadN 4 --readFilesIn filtered_data/SRR6974027_FILTERED_SUB.fastq --outFileNamePrefix SRR6974027 --outSAMtype BAM SortedByCoordinate --outSAMunmapped Within --outSAMattributes Standard --quantMode GeneCounts`
+`STAR --genomeDir genome_reference --runThreadN 8 --readFilesIn filtered_data/SRR6974027_FILTERED_SUB.fastq --outFileNamePrefix SRR6974027 --outSAMtype BAM SortedByCoordinate --outSAMunmapped Within --outSAMattributes Standard --quantMode GeneCounts`
 
 ### Counting mapped genes with htseq-count
 
-`htseq-count --nonunique all --format bam --stranded no --order pos --type exon --idattr gene_id SRR6974025Aligned.sortedByCoord.out.bam genome_reference/Homo_sapiens.GRCh38.104.chr.gtf > SRR6974025Aligned.counts
+`htseq-count --nonunique all --format bam --stranded no --order pos --type exon --idattr gene_id SRR6974025Aligned.sortedByCoord.out.bam genome_reference/Homo_sapiens.GRCh38.104.chr.gtf > SRR6974025.counts
 `
-
-`htseq-count --nonunique all --format bam --stranded no --order pos --type exon --idattr gene_id SRR6974027Aligned.sortedByCoord.out.bam genome_reference/Homo_sapiens.GRCh38.104.chr.gtf > SRR6974027Aligned.counts`
+`htseq-count --nonunique all --format bam --stranded no --order pos --type exon --idattr gene_id SRR6974027Aligned.sortedByCoord.out.bam genome_reference/Homo_sapiens.GRCh38.104.chr.gtf > SRR6974027.counts`
 
 
 ## References
 Sousa IG, Simi KCR, do Almo MM, Bezerra MAG et al. Gene expression profile of human T cells following a single stimulation of peripheral blood mononuclear cells with anti-CD3 antibodies. BMC Genomics 2019 Jul 19;20(1):593. PMID: 31324145
+
+## :notebook_with_decorative_cover: Practice 03 - EGF-mediated induction of Mcl-1 at the switch to lactation is essential for alveolar cell survival (Fu, 2019)
+
+Análise de genes diferencialmente expressos em células de glândulas mamárias de camundongos fêmeas em duas situações: grávidas e lactantes.
+Neste tutorial, a partir de dados já mapeados e contados, é realizada a análise de gene diferencialmente expressos (DEGs).
+
+[Link par o Tutorial](https://github.com/waldeyr/DisciplinaBioinfo/blob/main/rna-seq.ipynb)
