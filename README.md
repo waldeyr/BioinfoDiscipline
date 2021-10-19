@@ -63,11 +63,15 @@ conda config --add channels conda-forge
 
 ### Filtering data with fastp
 
-`mkdir filtered_data && fastp --thread 4 -p -q 30 -i rawdata/SRR13510367_1.fastq -I rawdata/SRR13510367_2.fastq -o filtered_data/SRR13510367_1_FILTERED.fastq -O filtered_data/SRR13510367_2_FILTERED.fastq && mv fastp.* filtered_data/`
+`mkdir filtered_data`
+
+`fastp --thread 4 -p -q 30 -i rawdata/SRR13510367_1.fastq -I rawdata/SRR13510367_2.fastq -o filtered_data/SRR13510367_1_FILTERED.fastq -O filtered_data/SRR13510367_2_FILTERED.fastq &`
+
+`mv fastp.* filtered_data/`
 
 ### Running the asembly with Spades
 
-`spades.py -t 4 -o assembly --careful -k 21,33,55 -1 filtered_data/SRR13510367_1_FILTERED.fastq -2 filtered_data/SRR13510367_2_FILTERED.fastq`
+`spades.py -t 4 -o assembly --careful -k 21,33,55 -1 filtered_data/SRR13510367_1_FILTERED.fastq -2 filtered_data/SRR13510367_2_FILTERED.fastq &`
 
 ### generate a report about the assembly with Quast
 
@@ -77,7 +81,7 @@ conda config --add channels conda-forge
 
 * Performe the report
 
-`quast.py assembly/scaffolds.fasta -r NC_045512.2.fasta`
+`quast assembly/scaffolds.fasta -R NC_045512.2.fasta`
 
 ## :notebook_with_decorative_cover: Practice 02 - [Transcriptome of human T cell stimulated with anti-CD3 antibody (Sousa, 2019)](https://www.ncbi.nlm.nih.gov/geo/query/acc.cgi?acc=GSE112899)
 
