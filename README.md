@@ -132,14 +132,12 @@ Briefing: human peripheral blood mononuclear cells were purified from healthy vo
 
 ### Mapping the filtered reads to the genome using STAR
 
-`STAR --genomeDir genome_reference --runThreadN 8 --readFilesIn filtered_data/SRR6974025_FILTERED.fastq filtered_data/SRR6974027_FILTERED.fastq --outFileNamePrefix SRR6974025_mapped --outSAMtype BAM SortedByCoordinate --outSAMunmapped Within --outSAMattributes Standard --quantMode GeneCounts TranscriptomeSAM`
+`STAR --genomeDir genome_reference --runThreadN 8 --readFilesIn filtered_data/SRR6974025_FILTERED.fastq filtered_data/SRR6974027_FILTERED.fastq --outFileNamePrefix mapped_data --outSAMtype BAM SortedByCoordinate --outSAMunmapped Within --outSAMattributes Standard --quantMode GeneCounts TranscriptomeSAM`
 
 ### Counting mapped genes with htseq-count
 
-`htseq-count --nonunique all --format bam --stranded no --order pos --type exon --idattr gene_id SRR6974025Aligned.sortedByCoord.out.bam genome_reference/Homo_sapiens.GRCh38.104.chr.gtf > SRR6974025.counts
+`htseq-count --nonunique all --format bam --stranded no --order pos --type exon --idattr gene_id <FILE_NAME>.out.bam genome_reference/Homo_sapiens.GRCh38.104.chr.gtf > table.counts
 `
-`htseq-count --nonunique all --format bam --stranded no --order pos --type exon --idattr gene_id SRR6974027Aligned.sortedByCoord.out.bam genome_reference/Homo_sapiens.GRCh38.104.chr.gtf > SRR6974027.counts`
-
 
 ## References
 Sousa IG, Simi KCR, do Almo MM, Bezerra MAG et al. Gene expression profile of human T cells following a single stimulation of peripheral blood mononuclear cells with anti-CD3 antibodies. BMC Genomics 2019 Jul 19;20(1):593. PMID: 31324145
