@@ -104,9 +104,7 @@ Briefing: human peripheral blood mononuclear cells were purified from healthy vo
 
 `wget http://ftp.ensembl.org/pub/release-104/gtf/homo_sapiens/Homo_sapiens.GRCh38.104.chr.gtf.gz`
 
-`wget http://ftp.ensembl.org/pub/release-104/gff3/homo_sapiens/Homo_sapiens.GRCh38.104.chromosome.22.gff3.gz`
-
-`gunzip Homo_sapiens.GRCh38.dna.chromosome.22.fa.gz && gunzip Homo_sapiens.GRCh38.104.chr.gtf.gz && gunzip Homo_sapiens.GRCh38.104.chromosome.22.gff3.gz && cd ../`
+`gunzip Homo_sapiens.GRCh38.dna.chromosome.22.fa.gz && gunzip Homo_sapiens.GRCh38.104.chr.gtf.gz && cd ../`
 
 `fastq-dump --accession SRR6974025 --outdir rawdata -v`
 
@@ -127,7 +125,7 @@ Briefing: human peripheral blood mononuclear cells were purified from healthy vo
 
 `mv fastp.* filtered_data/`
 
-#### Sampling a reads subset (10 milion reads) to make it feasible in a notebook.
+#### Sampling a reads subset (10 milion reads) to make it feasible in a notebook (not mandatory).
 
 `seqtk sample -s100 filtered_data/SRR6974025_FILTERED.fastq 10000000 > filtered_data/SRR6974025_FILTERED_SUB.fastq`
 
@@ -135,13 +133,11 @@ Briefing: human peripheral blood mononuclear cells were purified from healthy vo
 
 ### Generating an index for the genome reference
 
-`STAR --runThreadN 8 --runMode genomeGenerate --genomeDir genome_reference --genomeFastaFiles genome_reference/Homo_sapiens.GRCh38.dna.chromosome.22.fa --sjdbGTFfile genome_reference/Homo_sapiens.GRCh38.104.chromosome.22.gff3 --sjdbOverhang 99`
+`STAR --runThreadN 8 --runMode genomeGenerate --genomeDir genome_reference --genomeFastaFiles genome_reference/Homo_sapiens.GRCh38.dna.chromosome.22.fa --sjdbGTFfile genome_reference/Homo_sapiens.GRCh38.104.chr.gtf --sjdbOverhang 49`
 
 ### Mapping the filtered reads to the genome using STAR
 
-`STAR --genomeDir genome_reference --runThreadN 8 --readFilesIn filtered_data/SRR6974025_FILTERED_SUB.fastq --outFileNamePrefix SRR6974025 --outSAMtype BAM SortedByCoordinate --outSAMunmapped Within --outSAMattributes Standard --quantMode GeneCounts TranscriptomeSAM`
-
-`STAR --genomeDir genome_reference --runThreadN 8 --readFilesIn filtered_data/SRR6974027_FILTERED_SUB.fastq --outFileNamePrefix SRR6974027 --outSAMtype BAM SortedByCoordinate --outSAMunmapped Within --outSAMattributes Standard --quantMode GeneCounts`
+`STAR --genomeDir genome_reference --runThreadN 8 --readFilesIn filtered_data/SRR6974025_FILTERED.fastq filtered_data/SRR6974027_FILTERED.fastq --outFileNamePrefix SRR6974025_mapped --outSAMtype BAM SortedByCoordinate --outSAMunmapped Within --outSAMattributes Standard --quantMode GeneCounts TranscriptomeSAM`
 
 ### Counting mapped genes with htseq-count
 
