@@ -98,18 +98,6 @@ Briefing: human peripheral blood mononuclear cells were purified from healthy vo
 * OKT3  replica 1 = SRR6974025
 * FvFcR replica 1 = SRR6974027
 
-`mkdir genome_reference && cd genome_reference`
-
-`wget http://ftp.ensembl.org/pub/release-104/fasta/homo_sapiens/dna/Homo_sapiens.GRCh38.dna.chromosome.22.fa.gz`
-
-`wget http://ftp.ensembl.org/pub/release-104/gtf/homo_sapiens/Homo_sapiens.GRCh38.104.chr.gtf.gz`
-
-`gunzip Homo_sapiens.GRCh38.dna.chromosome.22.fa.gz && gunzip Homo_sapiens.GRCh38.104.chr.gtf.gz && cd ../`
-
-`fastq-dump --accession SRR6974025 --outdir rawdata -v`
-
-`fastq-dump --accession SRR6974027 --outdir rawdata -v`
-
 
 ### Filtering the reads quality using fastp
 
@@ -126,6 +114,14 @@ Briefing: human peripheral blood mononuclear cells were purified from healthy vo
 `mv fastp.* filtered_data/`
 
 ### Generating an index for the genome reference
+
+`mkdir genome_reference && cd genome_reference`
+
+`wget http://ftp.ensembl.org/pub/release-104/fasta/homo_sapiens/dna/Homo_sapiens.GRCh38.dna.chromosome.22.fa.gz`
+
+`wget http://ftp.ensembl.org/pub/release-104/gtf/homo_sapiens/Homo_sapiens.GRCh38.104.chr.gtf.gz`
+
+`gunzip Homo_sapiens.GRCh38.dna.chromosome.22.fa.gz && gunzip Homo_sapiens.GRCh38.104.chr.gtf.gz && cd ../`
 
 `STAR --runThreadN 8 --runMode genomeGenerate --genomeDir genome_reference --genomeFastaFiles genome_reference/Homo_sapiens.GRCh38.dna.chromosome.22.fa --sjdbGTFfile genome_reference/Homo_sapiens.GRCh38.104.chr.gtf --sjdbOverhang 49`
 
