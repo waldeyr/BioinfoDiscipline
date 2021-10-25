@@ -98,6 +98,11 @@ Briefing: human peripheral blood mononuclear cells were purified from healthy vo
 * OKT3  replica 1 = SRR6974025
 * FvFcR replica 1 = SRR6974027
 
+### Downloading the reads
+
+`fastq-dump --accession SRR6974025 --outdir rawdata -v`
+
+`fastq-dump --accession SRR6974027 --outdir rawdata -v`
 
 ### Filtering the reads quality using fastp
 
