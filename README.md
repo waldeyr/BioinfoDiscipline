@@ -34,7 +34,7 @@ conda config --add channels conda-forge
 
 #### How to install the needed tools into the DisciplinaBioinfo environment?
 
-`conda install pandas numpy jupyterlab jupyter nano readline=6.2 sra-tools entrez-direct bwa fastqc fastp spades quast star htseq seqtk samtools bcftools r-xml freebayes bedtools vcflib rtg-tools matplotlib -y`
+`conda install pandas numpy jupyterlab jupyter nano readline=6.2 sra-tools entrez-direct bwa fastqc fastp spades quast star htseq seqtk samtools=1.13 bcftools=1.13 r-xml freebayes bedtools vcflib rtg-tools matplotlib -y`
 
 * R packages (run it from the R prompt):
 
