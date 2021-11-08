@@ -193,7 +193,7 @@ Some extra tools will be needed:
 
 * Map reads to the reference genome
 
-`bwa mem -t 4 genome/NC_045512.2.fasta SRR13510367.fastq > SRR13510367.sam`
+`bwa mem -t 4 genome/NC_045512.2.fasta rawdata/SRR13510367.fastq > SRR13510367.sam`
 
 * Convert the SAM file to BAM format
 
@@ -201,15 +201,15 @@ Some extra tools will be needed:
 
 * Sort BAM file by coordinates
 
-`samtools sort -o SRR13510367_sorted.sam SRR13510367.sam`
-
-* Some stats about yout alignment
-
-`samtools flagstat SRR13510367_sorted.sam`
+`samtools sort -o SRR13510367_sorted.bam SRR13510367.bam`
 
 * create an sam index for the genome
 
 `samtools faidx genome/NC_045512.2.fasta`
+
+* Some stats about yout alignment
+
+`samtools flagstat SRR13510367_sorted.bam`
 
 
 ### Call variants
@@ -218,9 +218,13 @@ Some extra tools will be needed:
 
 `mkdir variants`
 
-* generateing a file with the variants
+* generating a file with the variants
 
-`freebayes -p 1 -f genome/NC_045512.2.fasta SRR13510367_sorted.sam > variants/SRR13510367.vcf`
+`freebayes -p 1 -f genome/NC_045512.2.fasta SRR13510367_sorted.bam > variants/SRR13510367.vcf`
+
+or (using samtools)
+
+`bcftools mpileup -Ou -f genome/NC_045512.2.fasta SRR13510367_sorted.bam | bcftools call -mv -o variants/SRR13510367.vcf`
 
 * Take a look in the first lines
 
