@@ -160,7 +160,7 @@ This practice is an adaptation of
 
 Some extra tools will be needed:
 
-`conda install -c bioconda picard bcftools samtools=1.9 bamtools freebayes bedtools vcflib rtg-tools bcftools matplotlib --force-reinstall`
+`conda install -c bioconda bcftools samtools=1.9 bamtools freebayes bedtools vcflib rtg-tools bcftools matplotlib --force-reinstall`
 
 
 ### Obtaining the raw material
