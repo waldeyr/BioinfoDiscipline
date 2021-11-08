@@ -203,9 +203,11 @@ Some extra tools will be needed:
 
 `samtools sort -o SRR13510367_sorted.bam SRR13510367.bam`
 
-* create an sam index for the genome
+* create an sam indexes for the genome and the mapped reads (bam)
 
 `samtools faidx genome/NC_045512.2.fasta`
+
+`samtools index SRR13510367_sorted.bam`
 
 * Some stats about yout alignment
 
