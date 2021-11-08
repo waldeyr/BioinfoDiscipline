@@ -142,9 +142,101 @@ Briefing: human peripheral blood mononuclear cells were purified from healthy vo
 ## References
 Sousa IG, Simi KCR, do Almo MM, Bezerra MAG et al. Gene expression profile of human T cells following a single stimulation of peripheral blood mononuclear cells with anti-CD3 antibodies. BMC Genomics 2019 Jul 19;20(1):593. PMID: 31324145
 
-## :notebook_with_decorative_cover: Practice 03 - EGF-mediated induction of Mcl-1 at the switch to lactation is essential for alveolar cell survival (Fu, 2019)
+## :notebook_with_decorative_cover: Practice 02.1 - EGF-mediated induction of Mcl-1 at the switch to lactation is essential for alveolar cell survival (Fu, 2019)
 
 Análise de genes diferencialmente expressos em células de glândulas mamárias de camundongos fêmeas em duas situações: grávidas e lactantes.
 Neste tutorial, a partir de dados já mapeados e contados, é realizada a análise de gene diferencialmente expressos (DEGs).
 
 [Link par o Tutorial](https://github.com/waldeyr/DisciplinaBioinfo/blob/main/rna-seq.ipynb)
+
+
+## :notebook_with_decorative_cover: Practice 03 - [COVID-19 variant calling from Illumina data](https://www.ncbi.nlm.nih.gov/nuccore/NC_045512.2)
+
+This practice is an adaptation of 
+
+* Nielsen R, Paul JS, Albrechtsen A, Song YS. Genotype and SNP calling from next-generation sequencing data. Nat Rev Genetics, 2011, 12:433-451.
+
+* Olsen ND et al. Best practices for evaluating single nucleotide variant calling methods for microbial genomics. Front. Genet., 2015, 6:235.
+
+Some extra tools will be needed:
+
+`conda install -c bioconda picard bcftools samtools=1.9 bamtools freebayes bedtools vcflib rtg-tools bcftools matplotlib --force-reinstall`
+
+
+### Obtaining the raw material
+
+* SARS-CoV-2 genome sequencing Rio Grande do Sul / Brazil, Dec 2020; Total RNA from SARS-CoV-2 positive samples was converted to cDNA. Viral whole-genome amplification was performed according to the Artic Network. Available in [SRR13510367](https://trace.ncbi.nlm.nih.gov/Traces/sra/?run=SRR13510367).
+
+
+`fastq-dump --accession SRR13510367 --outdir rawdata -v`
+
+* Download the Sars-Cov-2 reference genome
+
+`mkdir genome && esearch -db nucleotide -query "NC_045512.2" | efetch -format fasta > genome/NC_045512.2.fasta`
+
+
+### Alignment with Map with BWA-MEM
+
+* create the genome index
+
+`bwa index genome/NC_045512.2.fasta`
+
+* Map reads to the reference genome
+
+`bwa mem -t 4 genome/NC_045512.2.fasta SRR13510367.fastq > SRR13510367.sam`
+
+* Convert the SAM file to BAM format
+
+`samtools view -S -b SRR13510367.sam > SRR13510367.bam`
+
+* Sort BAM file by coordinates
+
+`samtools sort -o SRR13510367_sorted.sam SRR13510367.sam`
+
+* Some stats about yout alignment
+
+`samtools flagstat SRR13510367_sorted.sam`
+
+* create an sam index for the genome
+
+`samtools faidx genome/NC_045512.2.fasta`
+
+
+### Call variants
+
+* Create a folder to save the variant resuls
+
+`mkdir variants`
+
+* generateing a file with the variants
+
+`freebayes -p 1 -f genome/NC_045512.2.fasta SRR13510367_sorted.sam > variants/SRR13510367.vcf`
+
+* Take a look in the first lines
+
+`cat variants/SRR13510367.vcf | grep -v '##' | head -4`
+
+
+## Some stats
+
+* Compressing the file
+
+`bgzip variants/SRR13510367.vcf`
+
+* Creating an index for the variants file
+
+`tabix -p vcf variants/SRR13510367.vcf.gz`
+
+* Quick stats
+
+`rtg vcfstats variants/SRR13510367.vcf.gz`
+
+* More detailed stats
+
+`bcftools stats -F genome/NC_045512.2.fasta -s - variants/SRR13510367.vcf.gz > variants/SRR13510367.vcf.gz.stats`
+
+* Plots
+
+`mkdir variants/plots`
+
+`plot-vcfstats -p variants/plots/ variants/SRR13510367.vcf.gz.stats`
