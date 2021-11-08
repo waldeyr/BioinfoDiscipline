@@ -160,7 +160,17 @@ This practice is an adaptation of
 
 Some extra tools will be needed:
 
-`conda install -c bioconda bcftools samtools=1.9 bamtools freebayes bedtools vcflib rtg-tools bcftools matplotlib --force-reinstall`
+* If you do not have an enrironment called pratica03, then, create it:
+
+`conda create -n pratica03`
+
+* if you already have it, just access it:
+
+`conda activate pratica03`
+
+* if you do not have the software yet:
+
+`conda install -c bioconda sra-tools entrez-direct bcftools samtools=1.9 bamtools freebayes bedtools vcflib rtg-tools bcftools matplotlib bwa`
 
 
 ### Obtaining the raw material
