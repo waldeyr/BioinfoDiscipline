@@ -9,7 +9,7 @@ This is a repository for the Bioinformatics Discipline practices.
 * Download Anaconda software from  https://www.anaconda.com/products/individual
 * Install it (https://docs.anaconda.com/anaconda/install)
 
-#### How to create the environment using conda?
+#### How to set up the environment using conda?
 
 ##### Option 01:
 
@@ -21,7 +21,7 @@ Download the file [environment.yml](https://raw.githubusercontent.com/waldeyr/Bi
 
 `conda create -n pipelines python=3.6 r=3.6 -y`
 
-#### How to enter in the environment?
+#### How to enter in the conda environment?
 
 `conda activate pipelines`
 
@@ -34,11 +34,7 @@ conda config --add channels conda-forge
 
 #### How to install the needed tools into the DisciplinaBioinfo environment?
 
-`conda install pandas numpy jupyterlab jupyter -y`
-
-`conda install -c conda-forge nano readline=6.2 -y` 
-
-`conda install -c bioconda sra-tools entrez-direct fastqc fastp spades quast star htseq seqtk samtools r-xml -y`
+`conda install pandas numpy jupyterlab jupyter nano readline=6.2 sra-tools entrez-direct bwa fastqc fastp spades quast star htseq seqtk samtools bcftools r-xml freebayes bedtools vcflib rtg-tools matplotlib -y`
 
 * R packages (run it from the R prompt):
 
@@ -50,6 +46,11 @@ conda config --add channels conda-forge
 
 
 ## :notebook_with_decorative_cover: Practice 01 - De novo assembly of a Brazillian isolate of Sars-Cov-2 Genome
+
+### Enter in the conda environmet
+
+`conda activate pipelines`
+
 
 ### Obtaining the raw material
 
@@ -88,6 +89,11 @@ conda config --add channels conda-forge
 Briefing: human peripheral blood mononuclear cells were purified from healthy volunteers blood and were cultured in the presence of the monoclonal antibody OKT3 or a recombinant fragment of humanized anti-CD3 (FvFcR) or recombinant fragment chimeric anti-CD3 (FvFcM).
 
 * For the tutorial, we only will use the chromossome 22 and a monoclonal antibody OKT3 sample to make it feasible in a personal computer.
+
+
+### Enter in the conda environmet
+
+`conda activate pipelines`
 
 ### Obtaining the raw material
 
@@ -158,19 +164,10 @@ This practice is an adaptation of
 
 * Olsen ND et al. Best practices for evaluating single nucleotide variant calling methods for microbial genomics. Front. Genet., 2015, 6:235.
 
-Some extra tools will be needed:
 
-* If you do not have an enrironment called pratica03, then, create it:
+### Enter in the conda environmet
 
-`conda create -n pratica03`
-
-* if you already have it, just access it:
-
-`conda activate pratica03`
-
-* if you do not have the software yet:
-
-`conda install -c bioconda sra-tools entrez-direct bcftools samtools=1.9 bamtools freebayes bedtools vcflib rtg-tools bcftools matplotlib bwa`
+`conda activate pipelines`
 
 
 ### Obtaining the raw material
